@@ -513,12 +513,11 @@
                 </div>
             </div>
         </section>
-
         <!-- Contact Section -->
         <section id="contact-form" class="section contact-section">
             <div class="card">
                 <h2 class="section-title">Contact</h2>
-                <form class="contact-form" action="https://formspree.io/f/xzdajqzj" method="POST">
+                <form id="contact-form">
                     <div class="form-group">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" id="name" name="name" class="form-input" required>
@@ -549,6 +548,33 @@
         document.querySelectorAll('.section').forEach(section => {
             observer.observe(section);
         });
+const form = document.querySelector('#contact-form');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault(); // stop default form submission
+
+  const name = form.name.value;
+  const email = form.email.value;
+  const message = form.message.value;
+
+  try {
+    const response = await fetch('http://localhost:3000/contact', { // your backend URL
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+
+    if (response.ok) {
+      alert('Message sent!');
+      form.reset();
+    } else {
+      alert('Error sending message');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error sending message');
+  }
+});
     </script>
 </body>
 </html>
